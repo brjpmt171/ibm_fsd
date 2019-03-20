@@ -1,0 +1,14 @@
+1.employee count under each manager -name,count
+	SELECT m.firstName AS 'Manager',count(e.firstname) AS 'Direct reporte' FROM employees e INNER JOIN employees m ON m.employeeNumber = e.reportsto group by  m.firstname ORDER BY Manager;
+
+2. list customer wise unique products orderd
+	select distinct c.customerName, count(p.productName) from customers c inner join orders o on c.customerNumber=o.customerNumber inner join  orderdetails od on o.orderNumber=od.orderNumber inner join products p on od.productcode=p.productcode group by c.customerName order by count(p.productName);
+
+3.list product wise total order amount
+	select p.productName, sum(py.amount) from products p inner join orderdetails od on p.productCode=od.productCode inner join orders o on od.orderNumber=o.orderNumber inner join customers c on o.customerNumber=c.customerNumber inner join payments py on c.customerNumber=py.customerNumber group by productName order by py.amount;
+
+4. list details of manager who has highest sales
+	select m.firstName as Manager,sum(py.amount) as Amount_of_Sales from employees e inner join employees m on m.employeeNumber=e.reportsto inner join customers c on e.employeeNumber=c.salesRepEmployeeNumber inner join payments py on c.customerNumber=py.customerNumber group by m.firstName order by sum(py.amount);
+
+5. list month wise number of orders placed for each product line
+

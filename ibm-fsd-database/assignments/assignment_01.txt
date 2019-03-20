@@ -1,0 +1,14 @@
+1. list dept wise emp count
+	SELECT COUNT(E.ID) EMP_COUNT,D.DEPT_NAME FROM EMPLOYEE E INNER JOIN DEPARTMENT D on E.DEPT_ID=D.ID GROUP BY D.DEPT_NAME;
+
+2. list dept wise have salary more than 50k
+	mysql> Select D.dept_name,E.name,E.salary from employee E inner join department D on D.id=E.dept_id where E.salary>50000 group by D.dept_name,E.name,E.salary ;
+
+3. list country, dept wise avg salary
+	SELECT C.C_NAME,D.DEPT_NAME,AVG(E.SALARY) FROM EMPLOYEE E INNER JOIN DEPARTMENT D on E.DEPT_ID=D.ID INNER JOIN COUNTRY C ON C.ID=E.COUNTRY_ID GROUP BY C.C_NAME,D.DEPT_NAME;
+
+4. list country,dept have employee count more than 2 ordered by dept name
+	SELECT D.DEPT_NAME,C.C_NAME FROM EMPLOYEE E INNER JOIN DEPARTMENT D on E.DEPT_ID=D.ID INNER JOIN COUNTRY C ON C.ID=E.COUNTRY_ID GROUP BY D.DEPT_NAME,C.C_NAME HAVING COUNT(E.ID)>1 order by D.dept_name;
+
+5. list dept with employee name contains 'sa' and exists more than one country:
+	  select d.dept_name from employee e inner join department d on e.dept_id=d.id where name like '%sa%';
