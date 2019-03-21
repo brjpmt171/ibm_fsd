@@ -11,4 +11,9 @@
 	select m.firstName as Manager,sum(py.amount) as Amount_of_Sales from employees e inner join employees m on m.employeeNumber=e.reportsto inner join customers c on e.employeeNumber=c.salesRepEmployeeNumber inner join payments py on c.customerNumber=py.customerNumber group by m.firstName order by sum(py.amount);
 
 5. list month wise number of orders placed for each product line
+	Select pl.productline,extract(month from o.orderDate) as Month,count(extract(month from o.orderDate)) from productlines pl 
+	join products p on p.productline=pl.productline join orderdetails od on od.productcode=p.productcode 
+	join orders o on od.orderNumber=o.orderNumber group by pl.productline,Month;
 
+6. List Customers who has not placed any order for any products:
+	select customerName from customers where customerNumber not in (select distinct(customerNumber) from orders);
