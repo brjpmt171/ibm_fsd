@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class EmployeeDAO {
 	 static String JDBC_DRIVER;
@@ -41,29 +43,11 @@ public class EmployeeDAO {
 			}
 
 	 }
-	/* EmployeeDAO() {
-
-			try {
-				Class.forName(JDBC_DRIVER);
-				conn = DriverManager.getConnection(DB_URL, USER, PASS);
-				System.out.println("connect to db");
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-*/
+	
 	 
 	public int addIntoDB(Employee emp) {
 		// TODO Auto-generated method stub
-		
-		
-		
-		
+	
 		int status = 0;
 		String insertSql = "insert into employee (eid,name,salary,age,dept) values(?,?,?,?,?)";
 		try {
@@ -304,5 +288,47 @@ public class EmployeeDAO {
 			e.printStackTrace();
 		}
 		return empIdList;
+	}
+	public Map deptWiseEmpCount() {
+		// TODO Auto-generated method stub
+		Map<String,Integer> depWiseEmpCount=new TreeMap<>();
+		try {
+			String sql = "select dept,count(*) as empNo from employee group by dept order by dept";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String dept = rs.getString("dept");
+				int empCount=rs.getInt("empNo");
+				depWiseEmpCount.put(dept, empCount);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return depWiseEmpCount;
+	}
+	public int calculateAvgSal() {
+		// TODO Auto-generated method stub
+		int avgSal=0;
+		try {
+			String sql = "select avg(salary) as averageSalary from employee";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				avgSal=rs.getInt("averageSalary");
+				
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return avgSal;
+		
 	}
 }

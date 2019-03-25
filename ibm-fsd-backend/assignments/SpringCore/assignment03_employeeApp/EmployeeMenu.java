@@ -24,18 +24,6 @@ public class EmployeeMenu {
 
 		EmployeeManage empManage = (EmployeeManage) context.getBean("service");
 		while(true) {
-			//System.out.println("\n Press '1' -  Add Employee \n Press '2' -  Edit Employee \n Press '3' -  delete Employee \n Press '4' -  Search Employee \n Press '5' -  Display all employee \n Press '7' -  Statistic of employee \n Press '8' - Import \n Press '9' - Export \n Press '10' - Import from file \n Press '11' - Insert into database \n Press '12' - display from database \n Press '13' - delete from database \n Press '14' - update from database \n Press '6' -  Exit");
-			/*System.out.println("----- Operations without Database -----");
-			System.out.println("Press '1' -  Add Employee");
-			System.out.println("Press '2' -  Edit Employee");
-			System.out.println("Press '3' -  delete Employee");
-			System.out.println("Press '4' -  Search Employee");
-			System.out.println("Press '5' -  Display all employee");
-			System.out.println("Press '7' -  Statistic of employee");
-			System.out.println("Press '8' - Export as Binary Format");
-			System.out.println("Press '9' - Import from Binary Format");
-			System.out.println("Press '10' - Import from Text file");*/
-			
 			
 			System.out.println("\n");
 			System.out.println("---- Operations with MySql Database ----");
@@ -45,8 +33,10 @@ public class EmployeeMenu {
 			System.out.println("Press '4' - update from database");
 			System.out.println("Press '5' - Searching from database");
 			System.out.println("Press '6' - Employee Statistics from database");
+			System.out.println("Press '7' -  Export");
+			System.out.println("Press '8' -  Import");
 			
-			System.out.println("Press '7' -  Exit");
+			System.out.println("Press '9' -  Exit");
 			System.out.println("\n");
 			System.out.println("Enter Your Option : ");
 			int	type=sc.nextInt();
@@ -74,8 +64,16 @@ public class EmployeeMenu {
 		 case 6:
 			 empManage.statisticsEmp();
 			 break;
+			 
+		 case 7:
+			 empManage.exportEmp();
+			 break;
+			 
+		 case 8:
+			 empManage.importEmp();
+			 break;
 			
-		case 7:
+		case 9:
 			System.exit(0);
 			
 		

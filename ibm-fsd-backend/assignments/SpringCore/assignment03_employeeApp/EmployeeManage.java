@@ -1,4 +1,5 @@
 package com.examples.spring.employeeApp;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -6,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -34,7 +36,7 @@ public class EmployeeManage {
 	
 	static Scanner sc=new Scanner(System.in);
 
-	public void addEmp() throws ClassNotFoundException{
+	public void addEmp() throws CustomException, ClassNotFoundException{
 		// TODO Auto-generated method stub
 		
 		try {
@@ -46,19 +48,19 @@ public class EmployeeManage {
 			
 			System.out.println("enter employee salary: ");
 			int salary=sc.nextInt();
-	//		while(true) {
-	//			try {
-	//				throw new CustomException(salary); 
-	//				
-	//			}
-	//			catch(CustomException ex) {
-	//				//System.out.println(ex.getMessage());
-	//				if(CustomException.sl==0)
-	//					break;
-	//				System.out.println("enter employee salary: ");
-	//				salary=sc.nextInt();
-	//			}
-	//		}
+			while(true) {
+				try {
+					throw new CustomException(salary); 
+					
+				}
+				catch(CustomException ex) {
+					//System.out.println(ex.getMessage());
+					if(CustomException.sl==0)
+						break;
+					System.out.println("enter employee salary: ");
+					salary=sc.nextInt();
+				}
+			}
 			
 			System.out.println("enter employee Age: ");
 			int age=sc.nextInt();
@@ -119,13 +121,16 @@ public class EmployeeManage {
 			
 			System.out.println("Are you confirm to delete (y/n) : ");
 			String confirm=sc.next();
-			if(confirm=="y") {
+			if(confirm.equals("y")) {
 				System.out.println("into 'y'");
 				int status = dao.deleteEmpFromDB(deleteEid);
 				if(status>0)
 					System.out.println("Employee deleted.");
 				else
 					System.out.println("Employee does not deleted !!");
+			}else {
+				//System.out.println("Error in Deleting");
+				return ;
 			}
 		}
 	}
@@ -250,6 +255,61 @@ public class EmployeeManage {
 		}
 		else {
 			System.out.println("Emp Id With Age > 30 : "+ empIdListByAge);
+		}
+		
+		Map<String,Integer> deptWiseEmpCountWithSorted=dao.deptWiseEmpCount();
+		System.out.println("\n\nEmployee count by department with Sorted Order");
+		for(Map.Entry<String, Integer> map : deptWiseEmpCountWithSorted.entrySet()) {
+			System.out.println(map.getKey()+" : "+map.getValue());
+		}
+		
+		int avgSal=dao.calculateAvgSal();
+		System.out.println("\n\nAverage Salary of All Employee  : "+avgSal);
+	}
+	public void exportEmp() {
+		// TODO Auto-generated method stub
+		List<Employee> empList = dao.retriveEmpFromDB();
+		
+		try {
+			File file = new File("C:\\Users\\BrajaGopalMaity\\Desktop\\spring_empApp_export.txt");
+			PrintWriter pw = new PrintWriter(file);
+			
+			for(Employee emp : empList) {
+				
+				pw.printf("%s,%s,%d,%d,%s%n", emp.getEid(),emp.getName(),emp.getSalary(),emp.getAge(),emp.getDept());
+			}
+			pw.close();
+			System.out.println("Export Successfull");
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void importEmp() {
+		// TODO Auto-generated method stub
+		int empCount = 0;
+		try {
+			File file = new File("C:\\\\Users\\\\BrajaGopalMaity\\\\Desktop\\\\spring_empApp_import.txt");
+			Scanner sc = new Scanner(file);
+			while(sc.hasNextLine()) {
+			
+				String word[] = sc.nextLine().split(",");
+				String eid = word[0];
+				String name=word[1];
+				int salary = Integer.parseInt(word[2]);
+				int age = Integer.parseInt(word[3]);
+				String dept = word[4];
+				
+				Employee emp = new Employee(eid,name,salary,age,dept);
+				int status = dao.addIntoDB(emp);
+				if(status>0)
+				empCount++;
+			}
+			sc.close();
+			System.out.println(empCount+" employee(s) imported successfully..");
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 	
